@@ -10,7 +10,7 @@ from training.utils import *
 
 # parse the task name via command line
 parser = argparse.ArgumentParser()
-parser.add_argument('--task', type=str, default='pick_goal')
+parser.add_argument('--task', type=str, default='pick_goal@10')
 args = parser.parse_args()
 task = args.task
 
@@ -27,6 +27,8 @@ device = os.environ['DEVICE']
 def forward_pass(data, policy):
     image_data, qpos_data, action_data, is_pad, task_id = data
     image_data, qpos_data, action_data, is_pad, task_id = image_data.to(device), qpos_data.to(device), action_data.to(device), is_pad.to(device), task_id.to(device)
+    # print(task_id.shape)
+    # print(task_id)
     return policy(qpos_data, image_data, action_data, is_pad, task_id) # TODO remove None
 
     
@@ -121,7 +123,7 @@ if __name__ == '__main__':
    # number of training episodes
     data_dir = os.path.join(task_cfg['dataset_dir'], task)
     num_episodes = len(os.listdir(data_dir))
-    task_id = 2
+    task_id = 100
     # load data
     train_dataloader, val_dataloader, stats, _ = load_data(data_dir, num_episodes, task_cfg['camera_names'],
                                                             train_cfg['batch_size_train'], train_cfg['batch_size_val'],task_id)
