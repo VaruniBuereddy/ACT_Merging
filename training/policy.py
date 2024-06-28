@@ -23,10 +23,16 @@ class ACTPolicy(nn.Module):
 
     def __call__(self, qpos, image, actions=None, is_pad=None, task_id=None, split=None, **kwargs):
         """
+        :Task id: (b, 1)
         :param qpos: (b, 5,)
         :param image: (b, 1, 3, h, w)
         :param actions: (b, ep_len, 5)
         :param is_pad: (b, ep_len)
+        Example: torch.Size([8])
+                torch.Size([8, 5])
+                torch.Size([8, 1, 3, 480, 640])
+                torch.Size([8, 300, 5])
+
         :return:
         """
         env_state = None
@@ -36,7 +42,7 @@ class ACTPolicy(nn.Module):
         if actions is not None and split==None:  # training time
             actions = actions[:, :self.model.num_queries]
             is_pad = is_pad[:, :self.model.num_queries]
-            a_hat, _, (mu, logvar) = self.model(qpos, image, env_state, actions, is_pad)
+            a_hat, _, (mu, logvar) = self.model( qpos, image, env_state, actions, is_pad, task_id=task_id)
             total_kld, dim_wise_kld, mean_kld = kl_divergence(mu, logvar)
             loss_dict = dict()
             all_l1 = F.l1_loss(actions, a_hat, reduction='none')
@@ -44,20 +50,19 @@ class ACTPolicy(nn.Module):
             loss_dict['l1'] = l1
             loss_dict['kl'] = total_kld[0]
             loss_dict['loss'] = loss_dict['l1'] + loss_dict['kl'] * self.kl_weight
-
             return loss_dict
         
         elif actions is not None and split =="Encoder":
             actions = actions[:, :self.model.num_queries]
             is_pad = is_pad[:, :self.model.num_queries]
-            memory, tgt = self.model(qpos, image, env_state, actions, is_pad, split=split)
+            memory, tgt = self.model(qpos, image, env_state, actions, is_pad, task_id = task_id, split=split)
             return memory, tgt
 
         elif actions is not None and split =="Decoder":
             actions = actions[:, :self.model.num_queries]
             is_pad = is_pad[:, :self.model.num_queries]
 
-            a_hat, _, (mu, logvar) = self.model(qpos, image, env_state, actions, is_pad, split=split, **kwargs)
+            a_hat, _, (mu, logvar) = self.model(qpos, image, env_state, actions, is_pad, task_id = task_id,split=split, **kwargs)
             total_kld, dim_wise_kld, mean_kld = kl_divergence(mu, logvar)
             loss_dict = dict()
             all_l1 = F.l1_loss(actions, a_hat, reduction='none')
@@ -67,14 +72,19 @@ class ACTPolicy(nn.Module):
             loss_dict['loss'] = loss_dict['l1'] + loss_dict['kl'] * self.kl_weight
 
             return loss_dict
-            
-            # return a_hat, _, (mu, logvar)
 
 
         else:  # inference time
-            a_hat, _, (_, _) = self.model(qpos, image, env_state)  # no action, sample from prior
 
-            return a_hat
+            if(split=='Encoder'):
+            # print(f"Task ID: {task_id}")
+                mem, tgt =  self.model(qpos, image, env_state, actions, is_pad, task_id = task_id, split=split)
+                return mem, tgt
+
+            elif (split=='Decoder'or split==None):
+                a_hat, _, (_, _) = self.model(qpos, image, env_state, task_id=task_id, **kwargs)  # no action, sample from prior
+                # print(a_hat)    
+                return a_hat
 
     def configure_optimizers(self):
         return self.optimizer

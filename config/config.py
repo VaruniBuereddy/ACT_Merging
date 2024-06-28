@@ -4,10 +4,10 @@ os.environ['PYTORCH_ENABLE_MPS_FALLBACK'] = "1"
 import torch
 
 # data directory
-DATA_DIR = '/home/varuni/Documents/Researchwork/act/data'
+DATA_DIR = '/scratch/gb2643/documents/ACT/data/'
 
 # checkpoint directory
-CHECKPOINT_DIR = '/home/varuni/Documents/Researchwork/act/checkpoints/task_id_1_1000/close_drawer'
+CHECKPOINT_DIR = '../ACT_checkpoints'
 
 # device
 device = 'cpu'
@@ -29,13 +29,13 @@ ROBOT_PORTS = {
 # task config (you can add new tasks)
 TASK_CONFIG = {
     'dataset_dir': DATA_DIR,
-    'episode_len': 1000,
+    'episode_len': 300,
     'state_dim': 5,
     'action_dim': 5,
     'cam_width': 640,
     'cam_height': 480,
     'camera_names': ['front'],
-    'camera_port': 0
+    'camera_port': 2
 }
 
 
@@ -69,7 +69,7 @@ POLICY_CONFIG = {
 # training config
 TRAIN_CONFIG = {
     'seed': 42,
-    'num_epochs': 5000,
+    'num_epochs': 3500,
     'batch_size_val': 8,
     'batch_size_train': 8,
     'eval_ckpt_name': 'policy_last.ckpt',

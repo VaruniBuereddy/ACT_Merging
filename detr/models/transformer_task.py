@@ -52,7 +52,7 @@ class Transformer(nn.Module):
         if split == None:
         # TODO flatten only when input has H and W
             if len(src.shape) == 4: # has H and W
-                # flatten NxCxHxW to HWxNxC
+            # flatten NxCxHxW to HWxNxC
                 bs, c, h, w = src.shape
                 src = src.flatten(2).permute(2, 0, 1)
                 pos_embed = pos_embed.flatten(2).permute(2, 0, 1).repeat(1, bs, 1)
@@ -61,7 +61,7 @@ class Transformer(nn.Module):
 
                 additional_pos_embed = additional_pos_embed.unsqueeze(1).repeat(1, bs, 1) # seq, bs, dim
                 pos_embed = torch.cat([additional_pos_embed, pos_embed], axis=0)
-                # print(taskid_embed)
+
                 addition_input = torch.stack([taskid_embed, latent_input, proprio_input], axis=0)
                 src = torch.cat([addition_input, src], axis=0)
             else:
@@ -74,16 +74,13 @@ class Transformer(nn.Module):
 
             tgt = torch.zeros_like(query_embed)
             memory = self.encoder(src, src_key_padding_mask=mask, pos=pos_embed)
-
-
-    ################################## ADD layers #####################################
-
             hs = self.decoder(tgt, memory, memory_key_padding_mask=mask,
                             pos=pos_embed, query_pos=query_embed)
             hs = hs.transpose(1, 2)
 
             return hs
 
+            
         elif split=='Encoder':
             if len(src.shape) == 4: # has H and W
                 # flatten NxCxHxW to HWxNxC

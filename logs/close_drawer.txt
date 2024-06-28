@@ -1,0 +1,30 @@
+/scratch/gb2643/documents/ACT/act/lib/python3.9/site-packages/torch/utils/data/dataloader.py:558: UserWarning: This DataLoader will create 4 worker processes in total. Our suggested max number of worker in current system is 1, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+/scratch/gb2643/documents/ACT/act/lib/python3.9/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/scratch/gb2643/documents/ACT/act/lib/python3.9/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet18_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet18_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+
+Data from: /scratch/gb2643/documents/ACT/data/close_drawer
+
+number of parameters: 83.88M
+KL Weight 10
+
+Epoch 0
+Val loss:   70.92873
+l1: 0.964 kl: 6.996 loss: 70.929 
+/scratch/gb2643/documents/ACT/act/lib/python3.9/site-packages/torch/autograd/graph.py:744: UserWarning: Plan failed with a cudnnException: CUDNN_BACKEND_EXECUTION_PLAN_DESCRIPTOR: cudnnFinalize Descriptor Failed cudnn_status: CUDNN_STATUS_NOT_SUPPORTED (Triggered internally at /opt/conda/conda-bld/pytorch_1712608883701/work/aten/src/ATen/native/cudnn/Conv_v8.cpp:919.)
+  return Variable._execution_engine.run_backward(  # Calls into the C++ engine to run the backward pass
+Train loss: 56.40751
+l1: 0.692 kl: 5.572 loss: 56.408 
+Saved plots to ../ACT_checkpoints/close_drawer
+
+Epoch 1
+Val loss:   37.37632
+l1: 1.117 kl: 3.626 loss: 37.376 
+Train loss: 23.25116
+l1: 0.480 kl: 2.277 loss: 23.251 
+
+Epoch 2
+Val loss:   11.39519
+l1: 0.543 kl: 1.085 loss: 11.395 

@@ -8,27 +8,10 @@ import matplotlib.pyplot as plt
 
 from training.utils import *
 
-# parse the task name via command line
-parser = argparse.ArgumentParser()
-parser.add_argument('--task', type=str, default='pick_goal@10')
-args = parser.parse_args()
-task = args.task
-
-# configs
-task_cfg = TASK_CONFIG
-train_cfg = TRAIN_CONFIG
-policy_config = POLICY_CONFIG
-checkpoint_dir = os.path.join(train_cfg['checkpoint_dir'], task)
-
-# device
-device = os.environ['DEVICE']
-
 
 def forward_pass(data, policy):
     image_data, qpos_data, action_data, is_pad, task_id = data
     image_data, qpos_data, action_data, is_pad, task_id = image_data.to(device), qpos_data.to(device), action_data.to(device), is_pad.to(device), task_id.to(device)
-    # print(task_id.shape)
-    # print(task_id)
     return policy(qpos_data, image_data, action_data, is_pad, task_id) # TODO remove None
 
     
@@ -53,7 +36,6 @@ def train_bc(train_dataloader, val_dataloader, policy_config):
     # load policy
     policy = make_policy(policy_config['policy_class'], policy_config)
     policy.to(device)
-    print(policy_config['policy_class'])
 
     # load optimizer
     optimizer = make_optimizer(policy_config['policy_class'], policy)
@@ -107,8 +89,6 @@ def train_bc(train_dataloader, val_dataloader, policy_config):
         print(summary_string)
 
         if epoch % 200 == 0:
-            ckpt_path = os.path.join(checkpoint_dir, f"policy_epoch_{epoch}_seed_{train_cfg['seed']}.ckpt")
-            torch.save(policy.state_dict(), ckpt_path)
             plot_history(train_history, validation_history, epoch, checkpoint_dir, train_cfg['seed'])
 
     ckpt_path = os.path.join(checkpoint_dir, f'policy_last.ckpt')
@@ -117,22 +97,36 @@ def train_bc(train_dataloader, val_dataloader, policy_config):
 
 if __name__ == '__main__':
     # set seed
-    set_seed(train_cfg['seed'])
-    # create ckpt dir if not exists
+    # parse the task name via command line
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--task', type=str, default='close_drawer')
+    parser.add_argument('--task_id', type=int, default=1)
+    args = parser.parse_args()
+    task = args.task
+    task_id = args.task_id
+
+    # configs
+    task_cfg = TASK_CONFIG
+    train_cfg = TRAIN_CONFIG
+    policy_config = POLICY_CONFIG
+    checkpoint_dir = os.path.join(train_cfg['checkpoint_dir'], task)
     os.makedirs(checkpoint_dir, exist_ok=True)
+
+    # device
+    device = os.environ['DEVICE']
+    set_seed(train_cfg['seed'])
+
+
    # number of training episodes
     data_dir = os.path.join(task_cfg['dataset_dir'], task)
     num_episodes = len(os.listdir(data_dir))
-    task_id = 100
+    
     # load data
     train_dataloader, val_dataloader, stats, _ = load_data(data_dir, num_episodes, task_cfg['camera_names'],
-                                                            train_cfg['batch_size_train'], train_cfg['batch_size_val'],task_id)
+                                                            train_cfg['batch_size_train'], train_cfg['batch_size_val'], task_id)
     
-    # for batch_idx, data in enumerate(train_dataloader):
-    #     print(batch_idx)
-    #     image_data, qpos_data, action_data, is_pad, task_id = data
-    #     print(task_id.shape)
-    # save stats
+
+
     stats_path = os.path.join(checkpoint_dir, f'dataset_stats.pkl')
     with open(stats_path, 'wb') as f:
         pickle.dump(stats, f)

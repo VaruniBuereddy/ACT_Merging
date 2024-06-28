@@ -1,7 +1,7 @@
 # Copyright (c) Facebook, Inc. and its affiliates. All Rights Reserved
-from .detr_vae_v2 import build as build_vae
-from .detr_vae import build_cnnmlp as build_cnnmlp
-from .detr_vae import build_emb as build_emb
+from .detr_vae import build as build_vae
+# from .detr_vae import build_cnnmlp as build_cnnmlp
+# from .detr_vae import build_emb as build_emb
 
 
 def build_ACT_model(args):

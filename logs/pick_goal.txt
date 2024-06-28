@@ -1,0 +1,206 @@
+/scratch/gb2643/documents/ACT/act/lib/python3.9/site-packages/torch/utils/data/dataloader.py:558: UserWarning: This DataLoader will create 4 worker processes in total. Our suggested max number of worker in current system is 1, which is smaller than what this DataLoader is going to create. Please be aware that excessive worker creation might get DataLoader running slow or even freeze, lower the worker number to avoid potential slowness/freeze if necessary.
+  warnings.warn(_create_warning_msg(
+/scratch/gb2643/documents/ACT/act/lib/python3.9/site-packages/torchvision/models/_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+/scratch/gb2643/documents/ACT/act/lib/python3.9/site-packages/torchvision/models/_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=ResNet18_Weights.IMAGENET1K_V1`. You can also use `weights=ResNet18_Weights.DEFAULT` to get the most up-to-date weights.
+  warnings.warn(msg)
+
+Data from: /scratch/gb2643/documents/ACT/data/pick_goal
+
+number of parameters: 83.88M
+KL Weight 10
+
+Epoch 0
+Val loss:   81.24042
+l1: 0.807 kl: 8.043 loss: 81.240 
+Train loss: 62.36679
+l1: 0.796 kl: 6.157 loss: 62.367 
+Saved plots to ../ACT_checkpoints/pick_goal
+
+Epoch 1
+Val loss:   46.11080
+l1: 0.898 kl: 4.521 loss: 46.111 
+Train loss: 32.10681
+l1: 0.743 kl: 3.136 loss: 32.107 
+
+Epoch 2
+Val loss:   20.33414
+l1: 0.832 kl: 1.950 loss: 20.334 
+Train loss: 19.80032
+l1: 0.712 kl: 1.909 loss: 19.800 
+
+Epoch 3
+Val loss:   12.77895
+l1: 0.681 kl: 1.210 loss: 12.779 
+Train loss: 13.89140
+l1: 0.639 kl: 1.325 loss: 13.891 
+
+Epoch 4
+Val loss:   7.46687
+l1: 0.768 kl: 0.670 loss: 7.467 
+Train loss: 11.17449
+l1: 0.780 kl: 1.039 loss: 11.174 
+
+Epoch 5
+Val loss:   8.52869
+l1: 0.701 kl: 0.783 loss: 8.529 
+Train loss: 9.70667
+l1: 0.655 kl: 0.905 loss: 9.707 
+
+Epoch 6
+Val loss:   8.03409
+l1: 0.821 kl: 0.721 loss: 8.034 
+Train loss: 8.04079
+l1: 0.699 kl: 0.734 loss: 8.041 
+
+Epoch 7
+Val loss:   5.14332
+l1: 0.794 kl: 0.435 loss: 5.143 
+Train loss: 7.89645
+l1: 0.681 kl: 0.722 loss: 7.896 
+
+Epoch 8
+Val loss:   2.94932
+l1: 0.590 kl: 0.236 loss: 2.949 
+Train loss: 6.57463
+l1: 0.568 kl: 0.601 loss: 6.575 
+
+Epoch 9
+Val loss:   2.82632
+l1: 0.688 kl: 0.214 loss: 2.826 
+Train loss: 6.28561
+l1: 0.639 kl: 0.565 loss: 6.286 
+
+Epoch 10
+Val loss:   1.90848
+l1: 0.594 kl: 0.131 loss: 1.908 
+Train loss: 5.37435
+l1: 0.624 kl: 0.475 loss: 5.374 
+
+Epoch 11
+Val loss:   2.14044
+l1: 0.562 kl: 0.158 loss: 2.140 
+Train loss: 5.49841
+l1: 0.553 kl: 0.495 loss: 5.498 
+
+Epoch 12
+Val loss:   1.73731
+l1: 0.534 kl: 0.120 loss: 1.737 
+Train loss: 5.37454
+l1: 0.539 kl: 0.484 loss: 5.375 
+
+Epoch 13
+Val loss:   2.72241
+l1: 0.750 kl: 0.197 loss: 2.722 
+Train loss: 5.19454
+l1: 0.480 kl: 0.471 loss: 5.195 
+
+Epoch 14
+Val loss:   2.48226
+l1: 0.791 kl: 0.169 loss: 2.482 
+Train loss: 4.92472
+l1: 0.599 kl: 0.433 loss: 4.925 
+
+Epoch 15
+Val loss:   1.49745
+l1: 0.589 kl: 0.091 loss: 1.497 
+Train loss: 5.12262
+l1: 0.591 kl: 0.453 loss: 5.123 
+
+Epoch 16
+Val loss:   1.41859
+l1: 0.466 kl: 0.095 loss: 1.419 
+Train loss: 4.79013
+l1: 0.540 kl: 0.425 loss: 4.790 
+
+Epoch 17
+Val loss:   1.15120
+l1: 0.481 kl: 0.067 loss: 1.151 
+Train loss: 4.44818
+l1: 0.593 kl: 0.386 loss: 4.448 
+
+Epoch 18
+Val loss:   1.19779
+l1: 0.591 kl: 0.061 loss: 1.198 
+Train loss: 4.57958
+l1: 0.610 kl: 0.397 loss: 4.580 
+
+Epoch 19
+Val loss:   1.55471
+l1: 0.662 kl: 0.089 loss: 1.555 
+Train loss: 4.48800
+l1: 0.625 kl: 0.386 loss: 4.488 
+
+Epoch 20
+Val loss:   0.99608
+l1: 0.350 kl: 0.065 loss: 0.996 
+Train loss: 4.46435
+l1: 0.553 kl: 0.391 loss: 4.464 
+
+Epoch 21
+Val loss:   1.28519
+l1: 0.652 kl: 0.063 loss: 1.285 
+Train loss: 4.42512
+l1: 0.579 kl: 0.385 loss: 4.425 
+
+Epoch 22
+Val loss:   1.24694
+l1: 0.608 kl: 0.064 loss: 1.247 
+Train loss: 4.49591
+l1: 0.589 kl: 0.391 loss: 4.496 
+
+Epoch 23
+Val loss:   1.13630
+l1: 0.526 kl: 0.061 loss: 1.136 
+Train loss: 4.53655
+l1: 0.524 kl: 0.401 loss: 4.537 
+
+Epoch 24
+Val loss:   1.23192
+l1: 0.687 kl: 0.054 loss: 1.232 
+Train loss: 4.05200
+l1: 0.543 kl: 0.351 loss: 4.052 
+
+Epoch 25
+Val loss:   0.94978
+l1: 0.344 kl: 0.061 loss: 0.950 
+Train loss: 4.43572
+l1: 0.549 kl: 0.389 loss: 4.436 
+
+Epoch 26
+Val loss:   1.14919
+l1: 0.457 kl: 0.069 loss: 1.149 
+Train loss: 4.23350
+l1: 0.558 kl: 0.368 loss: 4.234 
+
+Epoch 27
+Val loss:   1.10376
+l1: 0.572 kl: 0.053 loss: 1.104 
+Train loss: 3.67469
+l1: 0.452 kl: 0.322 loss: 3.675 
+
+Epoch 28
+Val loss:   1.20695
+l1: 0.535 kl: 0.067 loss: 1.207 
+Train loss: 4.05037
+l1: 0.538 kl: 0.351 loss: 4.050 
+
+Epoch 29
+Val loss:   1.07196
+l1: 0.592 kl: 0.048 loss: 1.072 
+Train loss: 4.14263
+l1: 0.509 kl: 0.363 loss: 4.143 
+
+Epoch 30
+Val loss:   1.39707
+l1: 0.441 kl: 0.096 loss: 1.397 
+Train loss: 3.73881
+l1: 0.516 kl: 0.322 loss: 3.739 
+
+Epoch 31
+Val loss:   1.10274
+l1: 0.639 kl: 0.046 loss: 1.103 
+Train loss: 4.23291
+l1: 0.540 kl: 0.369 loss: 4.233 
+
+Epoch 32

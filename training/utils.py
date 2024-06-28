@@ -6,7 +6,7 @@ import numpy as np
 from einops import rearrange
 from torch.utils.data import DataLoader
 
-from training.policy_v1 import ACTPolicy, CNNMLPPolicy, EMBPolicy
+from training.policy import ACTPolicy, CNNMLPPolicy, EMBPolicy
 
 # import IPython
 # e = IPython.embed
