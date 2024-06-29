@@ -11,11 +11,6 @@ from robot import Robot
 from training.utils import *
 
 
-# parse the task name via command line
-parser = argparse.ArgumentParser()
-parser.add_argument('--task', type=str, default='close_drawer')
-args = parser.parse_args()
-task = args.task
 
 # config
 cfg = TASK_CONFIG
@@ -41,9 +36,20 @@ def capture_image(cam):
     return image
 
 if __name__ == "__main__":
-    task_dict = {'close_drawer': [100], 'pick_goal':[100]}
-    task_id = task_dict[args.task]
+    # parse the task name via command line
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--task', type=str, default='pick_goal')
+    parser.add_argument("--task_id", type = int, default = 0)
+    args = parser.parse_args()
+    task = args.task
+
+
+    task_dict = {'close_drawer': [1], 'pick_goal':[1]}
+    task_id = [args.task_id] 
+    #task_id = task_dict[args.task]
     task_id = torch.from_numpy(np.array(task_id))
+    print(f"Performing Task: {args.task}")
+    print(f"task_id: {task_id}")
 
     # task_id = torch.unsqueeze(task_id, 0)
     task_id = task_id.to(device)
@@ -58,7 +64,7 @@ if __name__ == "__main__":
     follower = Robot(device_name=ROBOT_PORTS['follower'])
 
     # load the policy
-    #checkpoint_dir = CHECKPOIN#os.path.join('checkpoints') #newly added by me
+    checkpoint_dir = os.path.join(checkpoint_dir, task)
     ckpt_path = os.path.join(checkpoint_dir, train_cfg['eval_ckpt_name'])
     policy = make_policy(policy_config['policy_class'], policy_config)
     loading_status = policy.load_state_dict(torch.load(ckpt_path, map_location=torch.device(device)))
@@ -112,7 +118,6 @@ if __name__ == "__main__":
 
                 if t % query_frequency == 0:
                     all_actions = policy(qpos, curr_image, task_id=task_id)
-                    print(all_actions)
                 if policy_config['temporal_agg']:
                     all_time_actions[[t], t:t+num_queries] = all_actions
                     actions_for_curr_step = all_time_actions[:, t]
@@ -153,48 +158,48 @@ if __name__ == "__main__":
 
         os.system('espeak "ahh"')
 
-        # create a dictionary to store the data
-        data_dict = {
-            '/observations/qpos': [],
-            '/observations/qvel': [],
-            '/action': [],
-        }
-        # there may be more than one camera
-        for cam_name in cfg['camera_names']:
-                data_dict[f'/observations/images/{cam_name}'] = []
+        # # create a dictionary to store the data
+        # data_dict = {
+        #     '/observations/qpos': [],
+        #     '/observations/qvel': [],
+        #     '/action': [],
+        # }
+        # # there may be more than one camera
+        # for cam_name in cfg['camera_names']:
+        #         data_dict[f'/observations/images/{cam_name}'] = []
 
-        # store the observations and actions
-        for o, a in zip(obs_replay, action_replay):
-            data_dict['/observations/qpos'].append(o['qpos'])
-            data_dict['/observations/qvel'].append(o['qvel'])
-            data_dict['/action'].append(a)
-            # store the images
-            for cam_name in cfg['camera_names']:
-                data_dict[f'/observations/images/{cam_name}'].append(o['images'][cam_name])
+        # # store the observations and actions
+        # for o, a in zip(obs_replay, action_replay):
+        #     data_dict['/observations/qpos'].append(o['qpos'])
+        #     data_dict['/observations/qvel'].append(o['qvel'])
+        #     data_dict['/action'].append(a)
+        #     # store the images
+        #     for cam_name in cfg['camera_names']:
+        #         data_dict[f'/observations/images/{cam_name}'].append(o['images'][cam_name])
 
-        t0 = time()
-        max_timesteps = len(data_dict['/observations/qpos'])
-        # create data dir if it doesn't exist
-        data_dir = cfg['dataset_dir']  
-        if not os.path.exists(data_dir): os.makedirs(data_dir)
-        # count number of files in the directory
-        idx = len([name for name in os.listdir(data_dir) if os.path.isfile(os.path.join(data_dir, name))])
-        dataset_path = os.path.join(data_dir, f'episode_{idx}')
-        # save the data
-        with h5py.File("data/demo/trained.hdf5", 'w', rdcc_nbytes=1024 ** 2 * 2) as root:
-            root.attrs['sim'] = True
-            obs = root.create_group('observations')
-            image = obs.create_group('images')
-            for cam_name in cfg['camera_names']:
-                _ = image.create_dataset(cam_name, (max_timesteps, cfg['cam_height'], cfg['cam_width'], 3), dtype='uint8',
-                                        chunks=(1, cfg['cam_height'], cfg['cam_width'], 3), )
-            qpos = obs.create_dataset('qpos', (max_timesteps, cfg['state_dim']))
-            qvel = obs.create_dataset('qvel', (max_timesteps, cfg['state_dim']))
-            # image = obs.create_dataset("image", (max_timesteps, 240, 320, 3), dtype='uint8', chunks=(1, 240, 320, 3))
-            action = root.create_dataset('action', (max_timesteps, cfg['action_dim']))
+        # t0 = time()
+        # max_timesteps = len(data_dict['/observations/qpos'])
+        # # create data dir if it doesn't exist
+        # data_dir = cfg['dataset_dir']  
+        # if not os.path.exists(data_dir): os.makedirs(data_dir)
+        # # count number of files in the directory
+        # idx = len([name for name in os.listdir(data_dir) if os.path.isfile(os.path.join(data_dir, name))])
+        # dataset_path = os.path.join(data_dir, f'episode_{idx}')
+        # # save the data
+        # with h5py.File("data/demo/trained.hdf5", 'w', rdcc_nbytes=1024 ** 2 * 2) as root:
+        #     root.attrs['sim'] = True
+        #     obs = root.create_group('observations')
+        #     image = obs.create_group('images')
+        #     for cam_name in cfg['camera_names']:
+        #         _ = image.create_dataset(cam_name, (max_timesteps, cfg['cam_height'], cfg['cam_width'], 3), dtype='uint8',
+        #                                 chunks=(1, cfg['cam_height'], cfg['cam_width'], 3), )
+        #     qpos = obs.create_dataset('qpos', (max_timesteps, cfg['state_dim']))
+        #     qvel = obs.create_dataset('qvel', (max_timesteps, cfg['state_dim']))
+        #     # image = obs.create_dataset("image", (max_timesteps, 240, 320, 3), dtype='uint8', chunks=(1, 240, 320, 3))
+        #     action = root.create_dataset('action', (max_timesteps, cfg['action_dim']))
             
-            for name, array in data_dict.items():
-                root[name][...] = array
+        #     for name, array in data_dict.items():
+        #         root[name][...] = array
     
     # disable torque
     follower._disable_torque()

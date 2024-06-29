@@ -145,9 +145,10 @@ class DETRVAE(nn.Module):
             pos = torch.cat(all_cam_pos, axis=3)  # (1, c, h, w)
 
             if split == None:
-                #print(task_id)
+                # print(task_id)
                 taskid_embed = self.task_id_proj(task_id)
-                #print(taskid_embed.shape)
+                # print(taskid_embed.shape)
+
                 hs = self.transformer(src, None, self.query_embed.weight, pos, latent_input, proprio_input,
                                   self.additional_pos_embed.weight, taskid_embed = taskid_embed)[0]
                 a_hat = self.action_head(hs)  # (b, seq, 5)
